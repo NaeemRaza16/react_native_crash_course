@@ -1,11 +1,17 @@
 import { useState } from "react";
-import { ResizeMode, Video } from "expo-video";
+import { useVideoPlayer, VideoView } from "expo-video";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 
 import { icons } from "../constants";
 
 export const VideoCard = ({ title, creator, avatar, thumbnail, video }) => {
-  const [play, setPlay] = useState(false);
+  // const [play, setPlay] = useState(false);
+
+  const player = useVideoPlayer(video, (player) => {
+    player.loop = false;
+  });
+
+  const [showVideo, setShowVideo] = useState(false);
 
   return (
     <View className="flex flex-col items-center px-4 mb-14">
@@ -40,24 +46,40 @@ export const VideoCard = ({ title, creator, avatar, thumbnail, video }) => {
         </View>
       </View>
 
-      {play ? (
-        <Video
-          source={{ uri: video }}
-          className="w-full h-60 rounded-xl mt-3"
-          resizeMode={ResizeMode.CONTAIN}
-          useNativeControls
-          shouldPlay
-          onPlaybackStatusUpdate={(status) => {
-            if (status.didJustFinish) {
-              setPlay(false);
+      {showVideo ? (
+        // <Video
+        //   source={{ uri: video }}
+        //   className="w-full h-60 rounded-xl mt-3"
+        //   resizeMode={ResizeMode.CONTAIN}
+        //   useNativeControls
+        //   shouldPlay
+        //   onPlaybackStatusUpdate={(status) => {
+        //     if (status.didJustFinish) {
+        //       setPlay(false);
+        //     }
+        //   }}
+        // />
+        <VideoView
+          style={{
+            width: "100%", // w-52
+            height: 240, // h-72
+            borderRadius: 12,
+            marginTop: 12, // mt-3
+          }}
+          player={player}
+          allowsFullscreen
+          allowsPictureInPicture
+          onPlayerStatusUpdate={(status) => {
+            if (status.playbackState === "ended") {
+              setShowVideo(false); // Hide video when playback ends
             }
           }}
         />
-        // <Text>Video</Text>
       ) : (
+        // <Text>Video</Text>
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={() => setPlay(true)}
+          onPress={() => setShowVideo(true)}
           className="w-full h-60 rounded-xl mt-3 relative flex justify-center items-center"
         >
           <Image

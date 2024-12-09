@@ -17,7 +17,6 @@ import { SearchInput } from "../../components/SearchInput";
 import { Trending } from "../../components/Trending";
 import { VideoCard } from "../../components/VideoCard";
 
-
 const Home = () => {
   const { data: posts, refetch } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
@@ -82,7 +81,6 @@ const Home = () => {
               <Text className="text-lg font-pregular text-gray-100 mb-3">
                 Latest Videos
               </Text>
-
               <Trending posts={latestPosts ?? []} />
               {/* <Trending posts={[{ id: 1 }, { id: 2 }, { id: 3 }] ?? []} /> */}
             </View>
